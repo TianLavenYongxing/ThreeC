@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>threec-tools</module>
+        <module>threec-mybatis</module>
     </modules>
 
     <properties>
@@ -16,22 +17,39 @@
         <maven.compiler.target>17</maven.compiler.target>
         <swagger.version>3.0.0</swagger.version>
         <spring.boot.starter.version>3.2.5</spring.boot.starter.version>
+        <mybatisplus.version>3.5.5</mybatisplus.version>
 
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${swagger.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring.boot.starter.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-core</artifactId>
+                <version>${mybatisplus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatisplus.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.baomidou</groupId>
+                        <artifactId>mybatis-plus-generator</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

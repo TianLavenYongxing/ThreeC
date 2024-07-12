@@ -105,7 +105,7 @@ public class ConvertUtils {
             field.setAccessible(true);
             return  field.get(object).toString();
         } catch (Exception e) {
-            return null;
+            throw new BusinessException("convert error ", e);
         }
     }
 
@@ -120,7 +120,7 @@ public class ConvertUtils {
             // 给变量赋值
             f.set(object, value);
         } catch (Exception e) {
-            throw new BusinessException(e.getMessage());
+            throw new BusinessException("convert error ", e);
         }
     }
 
