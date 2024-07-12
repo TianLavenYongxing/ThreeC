@@ -4,14 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Class ConsumerApplication.
- * <p>
- * 消费者
- * </p>
+ * 消费者应用程序
  *
- * @author laven
- * @version 1.0
- * @since 14/6/24
+ * @author Tian, Laven Yongxing
+ * @date 2024/07/12 18:57
  */
 @SpringBootApplication
 public class ConsumerApplication {

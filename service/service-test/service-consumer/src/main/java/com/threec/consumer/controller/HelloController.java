@@ -6,14 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Class HelloCnotroller.
- * <p>
- * hello
- * </p>
+ * 你好控制器
  *
- * @author laven
- * @version 1.0
- * @since 18/6/24
+ * @author Tian, Laven Yongxing
+ * @date 2024/07/12 18:58
  */
 @RequestMapping("hello")
 @RestController
