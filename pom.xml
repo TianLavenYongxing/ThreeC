@@ -12,11 +12,30 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <spring.boot.starter.version>3.2.5</spring.boot.starter.version>
+        <threec.mybatis.version>1.0-SNAPSHOT</threec.mybatis.version>
     </properties>
 
     <modules>
         <module>service</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.starter.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.threec</groupId>
+                <artifactId>threec-mybatis</artifactId>
+                <version>${threec.mybatis.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
 
