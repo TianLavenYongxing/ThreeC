@@ -32,32 +32,37 @@ public class R<T> implements Serializable {
     @ApiModelProperty(value = "响应数据")
     private T data;
 
-    public R<T> ok(T data) {
-        this.setData(data);
-        return this;
+    public static <T> R<T> ok(T data) {
+        R<T> result = new R<>();
+        result.setData(data);
+        return result;
     }
 
-    public R<T> error() {
-        this.code = ErrorCode.INTERNAL_SERVER_ERROR;
-        this.msg = MessageUtils.getMessage(this.code);
-        return this;
+    public static <T> R<T> error() {
+        R<T> result = new R<>();
+        result.setCode(ErrorCode.INTERNAL_SERVER_ERROR);
+        result.setMsg(MessageUtils.getMessage(ErrorCode.INTERNAL_SERVER_ERROR));
+        return result;
     }
 
-    public R<T> error(int code) {
-        this.code = code;
-        this.msg = MessageUtils.getMessage(this.code);
-        return this;
+    public static <T> R<T> error(int code) {
+        R<T> result = new R<>();
+        result.setCode(code);
+        result.setMsg(MessageUtils.getMessage(code));
+        return result;
     }
 
-    public R<T> error(String msg) {
-        this.code = ErrorCode.INTERNAL_SERVER_ERROR;
-        this.msg = msg;
-        return this;
+    public static <T> R<T> error(String msg) {
+        R<T> result = new R<>();
+        result.setCode(ErrorCode.INTERNAL_SERVER_ERROR);
+        result.setMsg(msg);
+        return result;
     }
 
-    public R<T> error(int code, String msg) {
-        this.code = code;
-        this.msg = msg;
-        return this;
+    public static <T> R<T> error(int code, String msg) {
+        R<T> result = new R<>();
+        result.setCode(code);
+        result.setMsg(msg);
+        return result;
     }
 }
