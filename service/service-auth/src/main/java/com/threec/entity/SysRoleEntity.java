@@ -1,15 +1,15 @@
 package com.threec.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.threec.mybatis.entity.BaseEntity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.EqualsAndHashCode;
 
 
-
 /**
- * 系统角色用户关联表
+ * 系统角色表
  *
  * @author Laven tianlavenyongxing@gmail.com
  * @since  2024-07-19
@@ -17,15 +17,16 @@ import lombok.EqualsAndHashCode;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper=false)
-@TableName("sys_user_role")
-public class SysUserRoleEntity {
+@TableName("sys_role")
+public class SysRoleEntity extends BaseEntity {
 
     /**
-     * 用户ID
+     * 角色
      */
-	private Integer userId;
+	private String role;
     /**
-     * 角色ID
+     * 角色名
      */
-	private Integer roleId;
+	private String roleName;
+
 }
