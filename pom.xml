@@ -14,6 +14,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <spring.boot.starter.version>3.2.5</spring.boot.starter.version>
         <threec.mybatis.version>1.0-SNAPSHOT</threec.mybatis.version>
+        <threec.redis.version>1.0-SNAPSHOT</threec.redis.version>
     </properties>
 
     <modules>
@@ -33,6 +34,11 @@
                 <groupId>com.threec</groupId>
                 <artifactId>threec-mybatis</artifactId>
                 <version>${threec.mybatis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.threec</groupId>
+                <artifactId>threec-redis</artifactId>
+                <version>${threec.redis.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
