@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>service-test</module>
+        <module>service-auth</module>
     </modules>
 
     <properties>
