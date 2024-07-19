@@ -9,6 +9,7 @@
     <modules>
         <module>threec-tools</module>
         <module>threec-mybatis</module>
+        <module>threec-redis</module>
     </modules>
 
     <properties>
@@ -19,6 +20,7 @@
         <spring.boot.starter.version>3.2.5</spring.boot.starter.version>
         <mybatisplus.version>3.5.5</mybatisplus.version>
         <druid.version>1.2.9</druid.version>
+        <fastjson2.version>2.0.9</fastjson2.version>
         <mysql.version>8.0.33</mysql.version>
     </properties>
 
@@ -61,6 +63,11 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
                 <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson2.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
