@@ -48,5 +48,5 @@ public class BaseEntity implements Serializable {
     /**
      * 删除标志（0未删除，已删除）
      */
-    private Long delFlag;
+    private boolean delFlag;
 }
