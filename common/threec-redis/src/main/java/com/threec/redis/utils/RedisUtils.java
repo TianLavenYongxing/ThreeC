@@ -1,12 +1,10 @@
 package com.threec.redis.utils;
 
 import com.alibaba.fastjson2.JSON;
-import jakarta.annotation.Resource;
-import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.redis.RedisSystemException;
@@ -51,7 +49,7 @@ public class RedisUtils implements ApplicationContextAware{
     private static ApplicationContext context;
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(@NonNull ApplicationContext applicationContext) throws BeansException {
         context = applicationContext;
         initDefaultRedisTemplate();
     }
@@ -76,8 +74,8 @@ public class RedisUtils implements ApplicationContextAware{
      * key相关操作
      */
     public static class KeyOps {
-        // todo 增加多redis数据源配置
         /**
+         *          todo 增加多redis数据源配置
          *         public static void set(String key, String value, String redisTemplateName) {
          *             StringRedisTemplate template = getRedisTemplate(redisTemplateName);
          *             if (template != null) {
@@ -2749,7 +2747,7 @@ public class RedisUtils implements ApplicationContextAware{
          */
         @Deprecated
         public static void releaseLock(final String key) {
-            KeyOps.delete(key);
+            boolean delete = KeyOps.delete(key);
         }
     }
 
