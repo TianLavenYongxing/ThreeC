@@ -5,11 +5,14 @@ server:
 spring:
   application:
     name: auth-service
+  messages:
+    encoding: UTF-8
+    basename: i18n/messages_common
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     #MySQL配置
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql-read.mysql.svc.cluster.local:3306/sys_threec?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://mysql-0.mysql.mysql.svc.cluster.local:3306/sys-threec?useSSL=false&serverTimezone=UTC
     username: root
     password: MSStarForever*00
 logging:

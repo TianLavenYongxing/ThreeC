@@ -42,6 +42,9 @@ public class AuthenticationUserDTO implements UserDetails {
     @ApiModelProperty(value = "用户角色")
     private List<String> roles;
 
+    @ApiModelProperty("登陆方式")
+    private int loginMode;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());

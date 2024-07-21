@@ -6,7 +6,7 @@ import com.threec.dto.AuthenticationRequestDTO;
 import com.threec.dto.AuthenticationResponseDTO;
 import com.threec.dto.AuthenticationUserDTO;
 import com.threec.entity.SysUserEntity;
-import com.threec.tools.utils.ConvertUtils;
+import com.threec.tools.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -47,9 +47,21 @@ public class AuthenticationService {
         return getAuthenticationResponseDTO(user);
     }
 
+    /**
+     * 注册
+     *
+     * @param authUser auth用户 authUser.getLoginMode() 【1 手机号注册, 2 邮箱注册, 3 用户名注册】
+     * @return {@code AuthenticationResponseDTO }
+     */
     public AuthenticationResponseDTO register(AuthenticationUserDTO authUser) {
         authUser.setPassword(passwordEncoder.encode(authUser.getPassword()));
-        SysUserEntity userEntity = ConvertUtils.sourceToTarget(authUser, SysUserEntity.class);
+        SysUserEntity userEntity = new SysUserEntity();
+        switch (authUser.getLoginMode()){
+            case 1 ->userEntity.setPhoneNumber(authUser.getUsername());
+            case 2 ->userEntity.setEmail(authUser.getUsername());
+            case 3 ->userEntity.setUsername(authUser.getUsername());
+            default -> throw new BusinessException(500);
+        }
         userDao.insert(userEntity);
         String jwtToken = jwtService.generateToken(authUser);
         String refreshToken = jwtService.generateRefreshToken(authUser);
