@@ -3,6 +3,7 @@ package com.threec.security;
 import com.alibaba.fastjson2.JSON;
 import com.threec.constant.AuthConstant;
 import com.threec.constant.RedisConstant;
+import com.threec.dao.SysUserDao;
 import com.threec.dto.AuthenticationUserDTO;
 import com.threec.redis.utils.RedisUtils;
 import com.threec.security.authentication.PhoneNumberAuthenticationProvider;
@@ -11,7 +12,6 @@ import com.threec.tools.utils.R;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
-import com.threec.dao.SysUserDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,9 +61,10 @@ public class ApplicationConfig {
             if (ObjectUtils.isEmpty(user)) {
                 throw new UsernameNotFoundException(AuthConstant.ERROR_USERNAME_OR_PASSWORD);
             }
-            return new User(user.getUsername(), user.getPassword(),  Optional.ofNullable(user.getRoles()).map(roles -> roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())).orElse(Collections.emptyList()));
+            return new User(user.getUsername(), user.getPassword(), Optional.ofNullable(user.getRoles()).map(roles -> roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())).orElse(Collections.emptyList()));
         };
     }
+
     @Bean(name = "phoneNumberUserDetailsService")
     public UserDetailsService phoneNumberUserDetailsService() {
         return phoneNumber -> {
@@ -135,7 +136,7 @@ public class ApplicationConfig {
             }
             String jwt = authHeader.substring(7);
             String username = jwtService.extractUsername(jwt);
-            RedisUtils.StringOps.setEx(RedisConstant.SYS_USER+username,jwt,10, TimeUnit.SECONDS);
+            RedisUtils.StringOps.setEx(RedisConstant.SYS_USER + username, jwt, 10, TimeUnit.SECONDS);
             SecurityContextHolder.clearContext();
             response.setContentType(AuthConstant.CONTENT_TYPE);
             try {
