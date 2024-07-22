@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 /**
- * 短信认证令牌
+ * 手机号码认证令牌
  *
  * @author Tian, Laven Yongxing
  * @date 2024/07/19 13:42

@@ -1,11 +1,13 @@
 package com.threec.security.authentication;
 
+import lombok.Setter;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+@Setter
 public class PhoneNumberAuthenticationProvider implements AuthenticationProvider {
 
     private UserDetailsService userDetailsService;
@@ -27,7 +29,4 @@ public class PhoneNumberAuthenticationProvider implements AuthenticationProvider
         return (PhoneNumberAuthenticationToken.class.isAssignableFrom(authentication));
     }
 
-    public void setUserDetailsService(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
 }
