@@ -29,6 +29,8 @@ import org.springframework.util.ObjectUtils;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -47,21 +49,21 @@ public class ApplicationConfig {
     @Bean(name = "userDetailsService")
     public UserDetailsService userDetailsService() {
         return username -> {
-            AuthenticationUserDTO user = userDao.findByPhoneNumber(username);
+            AuthenticationUserDTO user = userDao.findByUsername(username);
             if (ObjectUtils.isEmpty(user)) {
                 throw new UsernameNotFoundException(AuthConstant.ERROR_USERNAME_OR_PASSWORD);
             }
-            return new User(user.getUsername(), user.getPassword(), user.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+            return new User(user.getUsername(), user.getPassword(),  Optional.ofNullable(user.getRoles()).map(roles -> roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())).orElse(Collections.emptyList()));
         };
     }
     @Bean(name = "smsUserDetailsService")
     public UserDetailsService smsUserDetailsService() {
-        return phone -> {
-            AuthenticationUserDTO user = userDao.findByPhoneNumber(phone);
+        return phoneNumber -> {
+            AuthenticationUserDTO user = userDao.findByPhoneNumber(phoneNumber);
             if (ObjectUtils.isEmpty(user)) {
                 throw new UsernameNotFoundException(AuthConstant.ERROR_USERNAME_OR_PASSWORD);
             }
-            return new User(user.getUsername(), user.getPassword(), user.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+            return new User(user.getUsername(), user.getPassword(), Optional.ofNullable(user.getRoles()).map(roles -> roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())).orElse(Collections.emptyList()));
         };
     }
 
