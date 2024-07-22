@@ -1,8 +1,11 @@
 package com.threec.filter;
 
+import com.threec.constant.RedisConstant;
+import com.threec.redis.utils.RedisUtils;
 import com.threec.service.JwtService;
 import com.threec.constant.AuthConstant;
 import com.threec.dto.JWTValidationResultDTO;
+import com.threec.tools.utils.MessageUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -20,6 +23,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * jWT身份验证过滤器
@@ -37,17 +42,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().contains(AuthConstant.API_AUTH)) {
+        final String requestPath = request.getServletPath();
+        if(Arrays.stream(AuthConstant.API_AUTH).anyMatch(requestPath::contains)){
             filterChain.doFilter(request, response);
             return;
         }
         final String authHeader = request.getHeader(AuthConstant.AUTHORIZATION);
         final String jwt;
-        if (authHeader == null || !authHeader.startsWith(AuthConstant.BEARER)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
         jwt = authHeader.substring(AuthConstant.BEARER.length());
+        String jwtRedis = RedisUtils.StringOps.get(RedisConstant.SYS_USER + jwtService.extractUsername(jwt));
+        if(!Objects.equals(jwt,jwtRedis)){
+            logger.info(MessageUtils.getMessage(1001));
+        }
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             JWTValidationResultDTO jwtResult = jwtService.validateToken(jwt);
             if (!jwtResult.isValid()) {
