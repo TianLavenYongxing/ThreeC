@@ -37,3 +37,8 @@ application:
         expiration: 604800000 # 7 days
     b-crypt-password-encoder:
       strength: 11
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

@@ -16,6 +16,7 @@
         <threec.mybatis.version>1.0-SNAPSHOT</threec.mybatis.version>
         <threec.redis.version>1.0-SNAPSHOT</threec.redis.version>
         <jjwt.version>0.11.5</jjwt.version>
+        <springdoc_openapi.version>2.1.0</springdoc_openapi.version>
     </properties>
 
     <modules>
@@ -24,6 +25,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc_openapi.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
