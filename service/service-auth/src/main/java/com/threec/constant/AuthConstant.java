@@ -7,7 +7,7 @@ package com.threec.constant;
  * @date 2024/07/19 13:55
  */
 public class AuthConstant {
-    public static final String API_AUTH = "api/auth";
+    public static final String[] API_AUTH = {"api/auth/register","api/auth/authenticate"};
     public static final String JWT_EXPIRED = "TC JWT expired";
     public static final String JWT_UNSUPPORTED = "TC Unsupported JWT";
     public static final String JWT_MALFORMED = "TC Malformed JWT";
