@@ -1,9 +1,8 @@
 package com.threec.controller;
 
-import com.threec.dto.AuthenticationRequestDTO;
-import com.threec.dto.AuthenticationResponseDTO;
-import com.threec.dto.AuthenticationUserDTO;
+import com.threec.dto.*;
 import com.threec.service.AuthenticationService;
+import com.threec.tools.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -31,17 +30,17 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponseDTO> authenticate(@RequestBody AuthenticationRequestDTO request) {
-        return ResponseEntity.ok(service.authenticate(request));
+        AuthenticationResponseDTO responseDTO = switch (request.getLoginMode()) {
+            case 1 -> service.authenticate(request);
+            case 2 -> service.smsAuthenticate(request);
+            default -> throw new BusinessException(500);
+        };
+        return ResponseEntity.ok(responseDTO);
     }
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponseDTO> register(@Valid @RequestBody AuthenticationUserDTO user) {
         return ResponseEntity.ok(service.register(user));
-    }
-
-    @PostMapping("/smsAuthenticate")
-    public ResponseEntity<AuthenticationResponseDTO> smsAuthenticate(@RequestBody AuthenticationRequestDTO request) {
-        return ResponseEntity.ok(service.smsAuthenticate(request));
     }
 
     @PostMapping("/refresh-token")

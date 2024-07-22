@@ -5,12 +5,18 @@ import com.threec.dao.SysUserDao;
 import com.threec.dto.AuthenticationRequestDTO;
 import com.threec.dto.AuthenticationResponseDTO;
 import com.threec.dto.AuthenticationUserDTO;
+import com.threec.dto.UserNameAuthenticationRequestDTO;
+import com.threec.dto.SmsAuthenticationRequestDTO;
 import com.threec.entity.SysUserEntity;
+import com.threec.tools.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,14 +41,26 @@ public class AuthenticationService {
     private final JwtService jwtService;
 
     public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getMobile(), request.getPassword()));
-        AuthenticationUserDTO user = userDao.findByPhoneNumber(request.getMobile());
+        if (!(request instanceof UserNameAuthenticationRequestDTO userNameRequest)) {
+            throw new BusinessException(1000);
+        }
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userNameRequest.getUsername(), userNameRequest.getPassword()));
+        Object principal = authenticate.getPrincipal();
+        if (!(principal instanceof User user)) {
+            throw new BusinessException(500);
+        }
         return getAuthenticationResponseDTO(user);
     }
 
     public AuthenticationResponseDTO smsAuthenticate(AuthenticationRequestDTO request) {
-        authenticationManager.authenticate(new SmsAuthenticationToken(request.getMobile(), request.getCode()));
-        AuthenticationUserDTO user = userDao.findByPhoneNumber(request.getMobile());
+        if (!(request instanceof SmsAuthenticationRequestDTO smsRequest)) {
+            throw new BusinessException(1000);
+        }
+        Authentication authenticate = authenticationManager.authenticate(new SmsAuthenticationToken(smsRequest.getPhoneNumber(), smsRequest.getPassword()));
+        Object principal = authenticate.getPrincipal();
+        if (!(principal instanceof User user)) {
+            throw new BusinessException(500);
+        }
         return getAuthenticationResponseDTO(user);
     }
 
@@ -87,7 +105,7 @@ public class AuthenticationService {
         }
     }
 
-    private AuthenticationResponseDTO getAuthenticationResponseDTO(AuthenticationUserDTO authUser) {
+    private AuthenticationResponseDTO getAuthenticationResponseDTO(UserDetails authUser) {
         String refreshToken = jwtService.generateRefreshToken(authUser);
         String jwtToken = jwtService.generateToken(authUser);
         revokeAllUserTokens(authUser);
@@ -95,11 +113,11 @@ public class AuthenticationService {
         return AuthenticationResponseDTO.builder().accessToken(jwtToken).refreshToken(refreshToken).build();
     }
 
-    private void revokeAllUserTokens(AuthenticationUserDTO user) {
+    private void revokeAllUserTokens(UserDetails user) {
         // todo redis 查询根据用户名查询令牌 后验证 为空直接返回 不为空设置过期后保存
     }
 
-    private void saveUserToken(AuthenticationUserDTO user, String jwtToken) {
+    private void saveUserToken(UserDetails user, String jwtToken) {
         // todo redis写入 根据userId 为key写入
     }
 
