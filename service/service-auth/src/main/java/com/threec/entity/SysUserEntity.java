@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.EqualsAndHashCode;
 
+import java.util.Collection;
+
 
 /**
  * 系统用户表
@@ -64,4 +66,5 @@ public class SysUserEntity extends BaseEntity {
      * 帐户未锁定(0锁定，1未锁定)
      */
 	private Boolean accountNonLocked;
+    private Collection<String> roles;
 }

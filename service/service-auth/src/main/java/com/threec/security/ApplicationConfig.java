@@ -96,7 +96,7 @@ public class ApplicationConfig {
             // todo 逻辑 ThreeCLoginFailureHandler一样实现 authException逻辑
             response.setContentType(AuthConstant.CONTENT_TYPE);
             ServletOutputStream outputStream = response.getOutputStream();
-            R<Object> r = new R<>().error(HttpServletResponse.SC_UNAUTHORIZED, AuthConstant.AUTHENTICATION_FAILED);
+            R<Object> r = R.error(HttpServletResponse.SC_UNAUTHORIZED, AuthConstant.AUTHENTICATION_FAILED);
             outputStream.write(JSON.toJSONString(r).getBytes());
             outputStream.flush();
             outputStream.close();
@@ -109,7 +109,7 @@ public class ApplicationConfig {
             // todo 逻辑 ThreeCLoginFailureHandler一样实现 accessDeniedException逻辑
             response.setContentType(AuthConstant.CONTENT_TYPE);
             ServletOutputStream outputStream = response.getOutputStream();
-            R<Object> r = new R<>().error(HttpServletResponse.SC_FORBIDDEN, AuthConstant.ACCESS_DENIED);
+            R<Object> r = R.error(HttpServletResponse.SC_FORBIDDEN, AuthConstant.ACCESS_DENIED);
             outputStream.write(JSON.toJSONString(r).getBytes());
             outputStream.flush();
             outputStream.close();
@@ -128,7 +128,7 @@ public class ApplicationConfig {
             response.setContentType(AuthConstant.CONTENT_TYPE);
             try {
                 ServletOutputStream outputStream = response.getOutputStream();
-                R<Object> r = new R<>().error(HttpServletResponse.SC_OK, AuthConstant.LOGOUT_SUCCESS);
+                R<Object> r = R.error(HttpServletResponse.SC_OK, AuthConstant.LOGOUT_SUCCESS);
                 outputStream.write(JSON.toJSONString(r).getBytes());
                 outputStream.flush();
                 outputStream.close();

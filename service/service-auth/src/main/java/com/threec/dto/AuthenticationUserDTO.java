@@ -1,6 +1,9 @@
 package com.threec.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,9 +21,22 @@ import java.util.stream.Collectors;
  */
 @Data
 public class AuthenticationUserDTO implements UserDetails {
+
     @ApiModelProperty(value = "用户ID")
     private int userId;
 
+    @ApiModelProperty("登陆方式")
+    @NotNull
+    private int loginMode;
+
+    @ApiModelProperty("手机号")
+    private String phoneNumber;
+
+    @ApiModelProperty("邮箱")
+    private String email;
+
+    @NotBlank(message = "用户名不能为空或只含空白字符")
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "用户名只能包含字母、数字和下划线")
     @ApiModelProperty(value = "用户名-手机号")
     private String username;
 
@@ -41,9 +57,6 @@ public class AuthenticationUserDTO implements UserDetails {
 
     @ApiModelProperty(value = "用户角色")
     private List<String> roles;
-
-    @ApiModelProperty("登陆方式")
-    private int loginMode;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

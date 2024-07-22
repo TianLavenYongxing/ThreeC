@@ -6,6 +6,7 @@ import com.threec.dto.AuthenticationUserDTO;
 import com.threec.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +35,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponseDTO> register(@RequestBody AuthenticationUserDTO user) {
+    public ResponseEntity<AuthenticationResponseDTO> register(@Valid @RequestBody AuthenticationUserDTO user) {
         return ResponseEntity.ok(service.register(user));
     }
 
