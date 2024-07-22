@@ -16,12 +16,23 @@ public class JWTValidationResultDTO {
     private boolean isValid;
     private String errorMessage;
     private Claims claims;
-    // Static factory method for success
+
+    /**
+     * 成功 Static factory method for success
+     *
+     * @param claims 权利要求
+     * @return {@code JWTValidationResultDTO }
+     */
     public static JWTValidationResultDTO success(Claims claims) {
         return new JWTValidationResultDTO(true, null, claims);
     }
 
-    // Static factory method for failure
+    /**
+     * 失败 Static factory method for failure
+     *
+     * @param errorMessage 错误消息
+     * @return {@code JWTValidationResultDTO }
+     */
     public static JWTValidationResultDTO failure(String errorMessage) {
         return new JWTValidationResultDTO(false, errorMessage, null);
     }
