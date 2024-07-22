@@ -2,8 +2,11 @@ package com.threec.security;
 
 import com.alibaba.fastjson2.JSON;
 import com.threec.constant.AuthConstant;
+import com.threec.constant.RedisConstant;
 import com.threec.dto.AuthenticationUserDTO;
+import com.threec.redis.utils.RedisUtils;
 import com.threec.security.authentication.PhoneNumberAuthenticationProvider;
+import com.threec.service.JwtService;
 import com.threec.tools.utils.R;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,6 +35,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -41,10 +46,13 @@ import java.util.stream.Collectors;
  */
 @Configuration
 public class ApplicationConfig {
-    @Resource
-    private SysUserDao userDao;
+
     @Value("${application.security.b-crypt-password-encoder.strength}")
     private int strength;
+    @Resource
+    private JwtService jwtService;
+    @Resource
+    private SysUserDao userDao;
 
     @Bean(name = "userDetailsService")
     public UserDetailsService userDetailsService() {
@@ -126,7 +134,9 @@ public class ApplicationConfig {
                 return;
             }
             String jwt = authHeader.substring(7);
-            // todo redis中获取jwt 如果不为空那么设置为超期 后保存 最后 SecurityContextHolder.clearContext();
+            String username = jwtService.extractUsername(jwt);
+            RedisUtils.StringOps.setEx(RedisConstant.SYS_USER+username,jwt,10, TimeUnit.SECONDS);
+            SecurityContextHolder.clearContext();
             response.setContentType(AuthConstant.CONTENT_TYPE);
             try {
                 ServletOutputStream outputStream = response.getOutputStream();
