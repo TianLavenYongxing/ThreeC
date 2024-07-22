@@ -12,19 +12,19 @@ import java.util.Collection;
  * @author Tian, Laven Yongxing
  * @date 2024/07/19 13:42
  */
-public class SmsAuthenticationToken extends AbstractAuthenticationToken {
+public class PhoneNumberAuthenticationToken extends AbstractAuthenticationToken {
     private final Object principal;
     @Getter
     private String code;
 
-    public SmsAuthenticationToken(Object principal, String code) {
+    public PhoneNumberAuthenticationToken(Object principal, String code) {
         super(null);
         this.principal = principal;
         this.code = code;
         setAuthenticated(false);
     }
 
-    public SmsAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
+    public PhoneNumberAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         super.setAuthenticated(true); // must use super, as we override

@@ -38,7 +38,7 @@ public class ThreeCSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);         // 关闭csrf攻击防御
         http.cors(Customizer.withDefaults());               // 跨域问题
-        http.authorizeHttpRequests(authz -> authz.requestMatchers(AuthConstant.WHITE_LIST_URL).permitAll().anyRequest().access(threeCAuthorizationHandler));  //开启授权保护  anyRequest() 对所有请求开启授权保护  access()自定义授权
+        http.authorizeHttpRequests(auth -> auth.requestMatchers(AuthConstant.WHITE_LIST_URL).permitAll().anyRequest().access(threeCAuthorizationHandler));  //开启授权保护  anyRequest() 对所有请求开启授权保护  access()自定义授权
         http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // 无状态配置：通过
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling(e -> {

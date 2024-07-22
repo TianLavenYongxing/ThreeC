@@ -7,8 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Data;
 
-import java.util.Date;
-
 
 /**
  * 系统角色表

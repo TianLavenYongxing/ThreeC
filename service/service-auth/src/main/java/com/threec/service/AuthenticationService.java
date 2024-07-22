@@ -6,7 +6,7 @@ import com.threec.dto.AuthenticationRequestDTO;
 import com.threec.dto.AuthenticationResponseDTO;
 import com.threec.dto.AuthenticationUserDTO;
 import com.threec.dto.UserNameAuthenticationRequestDTO;
-import com.threec.dto.SmsAuthenticationRequestDTO;
+import com.threec.dto.PhoneNumberAuthenticationRequestDTO;
 import com.threec.entity.SysUserEntity;
 import com.threec.tools.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import com.threec.security.authentication.SmsAuthenticationToken;
+import com.threec.security.authentication.PhoneNumberAuthenticationToken;
 import com.threec.constant.AuthConstant;
 
 
@@ -52,11 +52,11 @@ public class AuthenticationService {
         return getAuthenticationResponseDTO(user);
     }
 
-    public AuthenticationResponseDTO smsAuthenticate(AuthenticationRequestDTO request) {
-        if (!(request instanceof SmsAuthenticationRequestDTO smsRequest)) {
+    public AuthenticationResponseDTO phoneNumberAuthenticate(AuthenticationRequestDTO request) {
+        if (!(request instanceof PhoneNumberAuthenticationRequestDTO phoneNumber)) {
             throw new BusinessException(1000);
         }
-        Authentication authenticate = authenticationManager.authenticate(new SmsAuthenticationToken(smsRequest.getPhoneNumber(), smsRequest.getPassword()));
+        Authentication authenticate = authenticationManager.authenticate(new PhoneNumberAuthenticationToken(phoneNumber.getPhoneNumber(), phoneNumber.getPassword()));
         Object principal = authenticate.getPrincipal();
         if (!(principal instanceof User user)) {
             throw new BusinessException(500);

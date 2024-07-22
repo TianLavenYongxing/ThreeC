@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SmsAuthenticationRequestDTO extends AuthenticationRequestDTO{
+public class PhoneNumberAuthenticationRequestDTO extends AuthenticationRequestDTO{
     @ApiModelProperty("手机号")
     private String phoneNumber;
     @ApiModelProperty("密码")

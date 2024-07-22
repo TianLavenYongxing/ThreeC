@@ -7,8 +7,6 @@ import com.threec.mybatis.dto.BashDTO;
 import lombok.EqualsAndHashCode;
 import lombok.Data;
 
-import java.util.Date;
-
 
 /**
  * 系统用户表

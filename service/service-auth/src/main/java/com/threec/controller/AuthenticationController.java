@@ -32,7 +32,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponseDTO> authenticate(@RequestBody AuthenticationRequestDTO request) {
         AuthenticationResponseDTO responseDTO = switch (request.getLoginMode()) {
             case 1 -> service.authenticate(request);
-            case 2 -> service.smsAuthenticate(request);
+            case 2 -> service.phoneNumberAuthenticate(request);
             default -> throw new BusinessException(500);
         };
         return ResponseEntity.ok(responseDTO);

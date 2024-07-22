@@ -3,7 +3,7 @@ package com.threec.security;
 import com.alibaba.fastjson2.JSON;
 import com.threec.constant.AuthConstant;
 import com.threec.dto.AuthenticationUserDTO;
-import com.threec.security.authentication.SmsAuthenticationProvider;
+import com.threec.security.authentication.PhoneNumberAuthenticationProvider;
 import com.threec.tools.utils.R;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
@@ -56,8 +56,8 @@ public class ApplicationConfig {
             return new User(user.getUsername(), user.getPassword(),  Optional.ofNullable(user.getRoles()).map(roles -> roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())).orElse(Collections.emptyList()));
         };
     }
-    @Bean(name = "smsUserDetailsService")
-    public UserDetailsService smsUserDetailsService() {
+    @Bean(name = "phoneNumberUserDetailsService")
+    public UserDetailsService phoneNumberUserDetailsService() {
         return phoneNumber -> {
             AuthenticationUserDTO user = userDao.findByPhoneNumber(phoneNumber);
             if (ObjectUtils.isEmpty(user)) {
@@ -75,16 +75,16 @@ public class ApplicationConfig {
         return authProvider;
     }
 
-    @Bean(name = "smsAuthenticationProvider")
-    public AuthenticationProvider smsAuthenticationProvider() {
-        SmsAuthenticationProvider smsAuthProvider = new SmsAuthenticationProvider();
-        smsAuthProvider.setUserDetailsService(smsUserDetailsService());
-        return smsAuthProvider;
+    @Bean(name = "phoneNumberAuthenticationProvider")
+    public AuthenticationProvider phoneNumberAuthenticationProvider() {
+        PhoneNumberAuthenticationProvider phoneNumberAuthProvider = new PhoneNumberAuthenticationProvider();
+        phoneNumberAuthProvider.setUserDetailsService(phoneNumberUserDetailsService());
+        return phoneNumberAuthProvider;
     }
 
     @Bean
     public AuthenticationManager authenticationManager() {
-        return new ProviderManager(Arrays.asList(smsAuthenticationProvider(), authenticationProvider()));
+        return new ProviderManager(Arrays.asList(phoneNumberAuthenticationProvider(), authenticationProvider()));
     }
 
     @Bean

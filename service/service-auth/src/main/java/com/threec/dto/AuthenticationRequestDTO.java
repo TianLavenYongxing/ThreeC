@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = UserNameAuthenticationRequestDTO.class, name = "username"),
-        @JsonSubTypes.Type(value = SmsAuthenticationRequestDTO.class, name = "sms")
+        @JsonSubTypes.Type(value = PhoneNumberAuthenticationRequestDTO.class, name = "phoneNumber")
 })
 @Getter
 @Setter
