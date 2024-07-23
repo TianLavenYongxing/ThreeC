@@ -17,6 +17,9 @@
         <threec.redis.version>1.0-SNAPSHOT</threec.redis.version>
         <jjwt.version>0.11.5</jjwt.version>
         <springdoc_openapi.version>2.1.0</springdoc_openapi.version>
+        <aliyun.java.sdk.version>4.5.17</aliyun.java.sdk.version>
+        <aliyun.java.sdk.dysmsapi.version>1.0.0</aliyun.java.sdk.dysmsapi.version>
+        <jasypt.version>3.0.4</jasypt.version>
     </properties>
 
     <modules>
@@ -25,6 +28,21 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun.java.sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+                <version>${aliyun.java.sdk.dysmsapi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>${jasypt.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
