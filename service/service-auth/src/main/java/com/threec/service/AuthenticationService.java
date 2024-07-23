@@ -3,13 +3,10 @@ package com.threec.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.threec.constant.RedisConstant;
 import com.threec.dao.SysUserDao;
-import com.threec.dto.AuthenticationRequestDTO;
-import com.threec.dto.AuthenticationResponseDTO;
-import com.threec.dto.AuthenticationUserDTO;
-import com.threec.dto.UserNameAuthenticationRequestDTO;
-import com.threec.dto.PhoneNumberAuthenticationRequestDTO;
+import com.threec.dto.*;
 import com.threec.entity.SysUserEntity;
 import com.threec.redis.utils.RedisUtils;
+import com.threec.security.authentication.SmsAuthenticationToken;
 import com.threec.tools.exception.BusinessException;
 import io.netty.util.internal.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -68,12 +65,22 @@ public class AuthenticationService {
         return getAuthenticationResponseDTO(user);
     }
 
-    /**
-     * 注册
-     *
-     * @param authUser auth用户 authUser.getLoginMode()
-     * @return {@code AuthenticationResponseDTO }
-     */
+    public AuthenticationResponseDTO smsAuthenticate(AuthenticationRequestDTO request) {
+        if (!(request instanceof SmsAuthenticationRequestDTO smsNumber)) {
+            throw new BusinessException(1000);
+        }
+        Authentication authenticate = authenticationManager.authenticate(new SmsAuthenticationToken(smsNumber.getPhoneNumber(), smsNumber.getSmsCode()));
+
+
+
+        return getAuthenticationResponseDTO(null);
+    }
+        /**
+         * 注册
+         *
+         * @param authUser auth用户 authUser.getLoginMode()
+         * @return {@code AuthenticationResponseDTO }
+         */
     public AuthenticationResponseDTO register(AuthenticationUserDTO authUser) {
         authUser.setPassword(passwordEncoder.encode(authUser.getPassword()));
         SysUserEntity userEntity = new SysUserEntity();

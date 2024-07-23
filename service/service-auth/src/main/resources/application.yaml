@@ -52,7 +52,7 @@ springdoc:
     enabled: true
 jasypt:
   encryptor:
-    password: yYtIasfonfownvsW+dsf== # 作为程序启动时的应用环境变量来带入
+    password: yYtIu+B2LTtAVuuORTKeWA== # 作为程序启动时的应用环境变量来带入
     algorithm: PBEWithHmacSHA512AndAES_128
     string-output-type: hexadecimal
 application:

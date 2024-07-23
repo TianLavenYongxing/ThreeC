@@ -28,11 +28,20 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
 
+    /**
+     * 认证  1 用户名密码验证
+     *      2 手机号密码验证
+     *      3 手机号短信验证码验证
+     *
+     * @param request 请求
+     * @return {@code ResponseEntity<AuthenticationResponseDTO> }
+     */
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponseDTO> authenticate(@RequestBody AuthenticationRequestDTO request) {
         AuthenticationResponseDTO responseDTO = switch (request.getLoginMode()) {
             case 1 -> service.authenticate(request);
             case 2 -> service.phoneNumberAuthenticate(request);
+            case 3 -> service.smsAuthenticate(request);
             default -> throw new BusinessException(500);
         };
         return ResponseEntity.ok(responseDTO);
