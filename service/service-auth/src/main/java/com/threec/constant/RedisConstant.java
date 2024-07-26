@@ -8,4 +8,5 @@ package com.threec.constant;
  */
 public class RedisConstant {
     public static final String SYS_USER = "ThreeC:User:Login:";
+    public static final String USER_SMS = "ThreeC:User:Sms:";
 }
