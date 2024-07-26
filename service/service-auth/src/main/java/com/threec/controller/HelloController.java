@@ -1,5 +1,6 @@
 package com.threec.controller;
 
+import com.threec.dto.AuthenticationUserDTO;
 import com.threec.service.SmsService;
 import com.threec.tools.utils.R;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +33,8 @@ public class HelloController {
 
     @GetMapping("sms")
     public R<Object> hello2() {
-        boolean b = service.SendSMSCaptcha();
+        AuthenticationUserDTO smsAuthenticationRequestDTO = new AuthenticationUserDTO();
+        boolean b = service.SendSMSCaptcha(smsAuthenticationRequestDTO);
         if (b) {
             return R.ok("hello2");
         }
