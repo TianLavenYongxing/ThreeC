@@ -2,7 +2,9 @@ package com.threec.controller;
 
 import com.threec.dto.*;
 import com.threec.service.AuthenticationService;
+import com.threec.service.SmsService;
 import com.threec.tools.exception.BusinessException;
+import com.threec.tools.utils.R;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -27,6 +29,7 @@ import java.io.IOException;
 public class AuthenticationController {
 
     private final AuthenticationService service;
+    private final SmsService smsService;
 
     /**
      * 认证  1 用户名密码验证
@@ -37,24 +40,32 @@ public class AuthenticationController {
      * @return {@code ResponseEntity<AuthenticationResponseDTO> }
      */
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponseDTO> authenticate(@RequestBody AuthenticationRequestDTO request) {
+    public R<AuthenticationResponseDTO> authenticate(@RequestBody AuthenticationRequestDTO request) {
         AuthenticationResponseDTO responseDTO = switch (request.getLoginMode()) {
             case 1 -> service.authenticate(request);
             case 2 -> service.phoneNumberAuthenticate(request);
             case 3 -> service.smsAuthenticate(request);
             default -> throw new BusinessException(500);
         };
-        return ResponseEntity.ok(responseDTO);
+        return R.ok(responseDTO);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponseDTO> register(@Valid @RequestBody AuthenticationUserDTO user) {
-        return ResponseEntity.ok(service.register(user));
+    public R<AuthenticationResponseDTO> register(@Valid @RequestBody AuthenticationUserDTO user) {
+        return R.ok(service.register(user));
     }
 
     @PostMapping("/refresh-token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         service.refreshToken(request, response);
+    }
+
+    @PostMapping("/getSmsCaptcha")
+    public R<Object> getSmsCaptcha(@Valid @RequestBody SmsAuthenticationRequestDTO dto){
+        if(smsService.getSMSCaptcha(dto)){
+           return R.ok(true);
+        }
+        return R.error();
     }
 
 }
