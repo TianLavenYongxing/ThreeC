@@ -70,10 +70,11 @@ public class AuthenticationService {
             throw new BusinessException(1000);
         }
         Authentication authenticate = authenticationManager.authenticate(new SmsAuthenticationToken(smsNumber.getPhoneNumber(), smsNumber.getSmsCode()));
-
-
-
-        return getAuthenticationResponseDTO(null);
+        Object principal = authenticate.getPrincipal();
+        if (!(principal instanceof User user)) {
+            throw new BusinessException(500);
+        }
+        return getAuthenticationResponseDTO(user);
     }
         /**
          * 注册

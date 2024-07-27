@@ -1,29 +1,50 @@
 package com.threec.security.authentication;
 
+import com.alibaba.druid.util.StringUtils;
+import lombok.Setter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import javax.annotation.Resource;
+
+@Setter
 public class SmsAuthenticationProvider implements AuthenticationProvider {
-
+    protected final Log logger = LogFactory.getLog(this.getClass());
+    protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
+    @Resource(name = "smsUserDetailsService")
     private UserDetailsService userDetailsService;
-
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        PhoneNumberAuthenticationToken authenticationToken = (PhoneNumberAuthenticationToken) authentication;
-        String mobile = (String) authenticationToken.getPrincipal();
-        String code = authenticationToken.getPassword();
-        // todo redis之类通过手机号查询验证码后 比较
-        UserDetails userDetails = userDetailsService.loadUserByUsername(mobile);
-        PhoneNumberAuthenticationToken phoneNumberAuthenticationToken = new PhoneNumberAuthenticationToken(userDetails, userDetails.getAuthorities());
-        phoneNumberAuthenticationToken.setDetails(phoneNumberAuthenticationToken.getDetails());
-        return phoneNumberAuthenticationToken;
+        SmsAuthenticationToken authenticationToken = (SmsAuthenticationToken) authentication;
+        String phoneNumber = (String) authenticationToken.getPrincipal();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(phoneNumber);
+        additionalAuthenticationChecks(userDetails, authenticationToken);
+        return new SmsAuthenticationToken(userDetails, userDetails.getAuthorities());
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return (PhoneNumberAuthenticationToken.class.isAssignableFrom(authentication));
+        return (SmsAuthenticationToken.class.isAssignableFrom(authentication));
+    }
+
+    protected void additionalAuthenticationChecks(UserDetails userDetails, SmsAuthenticationToken authentication) throws AuthenticationException {
+        if (authentication.getCredentials() == null) {
+            this.logger.debug("Failed to authenticate since no credentials provided");
+            throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
+        } else {
+            String presentedPassword = authentication.getCredentials().toString();
+            if (!StringUtils.equals(presentedPassword, userDetails.getPassword())) {
+                this.logger.debug("Failed to authenticate since password does not match stored value");
+                throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
+            }
+        }
     }
 }

@@ -24,7 +24,7 @@ public class R<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "编码：200表示成功，其他值表示失败")
-    private int code = 0;
+    private int code = 200;
 
     @ApiModelProperty(value = "消息内容")
     private String msg = "success";

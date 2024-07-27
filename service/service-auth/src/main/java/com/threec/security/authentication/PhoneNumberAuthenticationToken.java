@@ -13,6 +13,7 @@ import java.util.Collection;
  * @date 2024/07/19 13:42
  */
 public class PhoneNumberAuthenticationToken extends AbstractAuthenticationToken {
+
     private final Object principal;
     @Getter
     private String password;

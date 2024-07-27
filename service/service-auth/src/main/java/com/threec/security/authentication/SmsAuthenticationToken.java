@@ -12,12 +12,6 @@ public class SmsAuthenticationToken extends AbstractAuthenticationToken {
     @Getter
     private String code;
 
-    public SmsAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
-        super(authorities);
-        this.principal = principal;
-        super.setAuthenticated(true);
-    }
-
     public SmsAuthenticationToken(Object principal, String code) {
         super(null);
         this.principal = principal;
@@ -25,9 +19,15 @@ public class SmsAuthenticationToken extends AbstractAuthenticationToken {
         setAuthenticated(false);
     }
 
+    public SmsAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
+        super(authorities);
+        this.principal = principal;
+        super.setAuthenticated(true);
+    }
+
     @Override
     public Object getCredentials() {
-        return null;
+        return code;
     }
 
     @Override

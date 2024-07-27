@@ -51,14 +51,14 @@ public class SmsService {
         Random random = new Random();
         String code = Integer.toString(random.nextInt(10)) + random.nextInt(10) + random.nextInt(10) + random.nextInt(10);
         SendSmsRequest request = new SendSmsRequest();
-        request.setSignName("ThreeC");
-        request.setTemplateCode("SMS_20240101");
+        request.setSignName("趣射体育");
+        request.setTemplateCode("SMS_248905573");
         request.setPhoneNumbers(dto.getPhoneNumber());
         request.setTemplateParam("{\"code\":\"" + code + "\"}");
         try {
             SendSmsResponse response = client.getAcsResponse(request);
             if ("OK".equals(response.getCode())) {
-                RedisUtils.StringOps.setEx(RedisConstant.USER_SMS + dto.getPhoneNumber(), code, 2, TimeUnit.MINUTES);
+                RedisUtils.StringOps.setEx(RedisConstant.USER_SMS + dto.getPhoneNumber(), code, 20, TimeUnit.MINUTES);
                 return true;
             }
         } catch (ServerException e) {

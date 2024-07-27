@@ -7,6 +7,7 @@ import com.threec.dao.SysUserDao;
 import com.threec.dto.AuthenticationUserDTO;
 import com.threec.redis.utils.RedisUtils;
 import com.threec.security.authentication.PhoneNumberAuthenticationProvider;
+import com.threec.security.authentication.SmsAuthenticationProvider;
 import com.threec.service.JwtService;
 import com.threec.tools.utils.R;
 import jakarta.servlet.ServletOutputStream;
@@ -76,6 +77,18 @@ public class ApplicationConfig {
         };
     }
 
+    @Bean(name = "smsUserDetailsService")
+    public UserDetailsService smsUserDetailsService() {
+        return phoneNumber -> {
+            String code = RedisUtils.StringOps.get(RedisConstant.USER_SMS + phoneNumber);
+            AuthenticationUserDTO user = userDao.findByPhoneNumber(phoneNumber);
+            if (ObjectUtils.isEmpty(code)) {
+                throw new UsernameNotFoundException(AuthConstant.ERROR_USERNAME_OR_PASSWORD);
+            }
+            return new User(user.getUsername(), code, Collections.emptyList());
+        };
+    }
+
     @Bean(name = "authenticationProvider")
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -91,9 +104,16 @@ public class ApplicationConfig {
         return phoneNumberAuthProvider;
     }
 
+    @Bean(name = "smsAuthenticationProvider")
+    public AuthenticationProvider smsAuthenticationProvider() {
+        SmsAuthenticationProvider smsAuthenticationProvider = new SmsAuthenticationProvider();
+        smsAuthenticationProvider.setUserDetailsService(smsUserDetailsService());
+        return smsAuthenticationProvider;
+    }
+
     @Bean
     public AuthenticationManager authenticationManager() {
-        return new ProviderManager(Arrays.asList(phoneNumberAuthenticationProvider(), authenticationProvider()));
+        return new ProviderManager(Arrays.asList(phoneNumberAuthenticationProvider(), authenticationProvider(), smsAuthenticationProvider()));
     }
 
     @Bean
